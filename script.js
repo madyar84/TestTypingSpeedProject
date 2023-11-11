@@ -1,9 +1,14 @@
 const theTimer=document.querySelector(".timer");
 const testArea=document.querySelector("#test-area");
+const originText=document.querySelector("#origin-text p").innerHTML;
+const testWrapper=document.querySelector(".test-wrapper");
+const resetButton=document.querySelector("#reset");
+
 
 
 var timer=[0,0,0,0];
-var timerRunnig=false;
+var cc
+var interval;
 
 
 function leadingZero(time){
@@ -33,6 +38,47 @@ timer[2]=Math.floor(timer[3] - (timer[1]*100) - (timer[0]*6000));
 }
 
 
+
+function spellChek(){
+let textEntered=testArea.value;
+let originTextMatch=originText.substring(0,textEntered.length);
+
+
+if(textEntered==originText)
+{
+
+testWrapper.style.borderColor="green";
+clearInterval(interval); 
+
+}else{
+    if(textEntered==originTextMatch){
+       
+        testWrapper.style.borderColor="yellow";
+       
+    }
+    else
+    {
+     
+        testWrapper.style.borderColor="red";
+    }
+}
+}
+
+
+
+function reset(){
+    clearInterval(interval);
+    interval=null;
+    timer=[0,0,0,0];
+    timerRunnig=false;
+
+
+    testArea.value="";
+    theTimer.innerHTML="00:00:00";
+    testWrapper.style.borderColor="grey";
+
+}
+
 function Start(){
   
     let textEnteredLength=testArea.value.length;
@@ -40,7 +86,7 @@ function Start(){
     if(textEnteredLength==0 && !timerRunnig)
     {
         timerRunnig=true;
-        setInterval(runTimer,10);
+       interval=setInterval(runTimer,10);
     }
     
 
@@ -49,4 +95,8 @@ function Start(){
 
 
 testArea.addEventListener("keypress",Start);
+testArea.addEventListener("keyup",spellChek);
+resetButton.addEventListener("click",reset);
+
+
 
